@@ -20,7 +20,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Connect to the database
-// $connect = mysqli_connect("localhost", "root", "", "dayplanner");  
+
 $connection = DatabaseHelper::createConnectionInfo(array(DBCONNECTION, DBUSER, DBPASS));
 
 // We can then pass this connection variable to other classes that need it

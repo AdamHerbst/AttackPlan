@@ -9,6 +9,7 @@ class User {
     //Constructor:
     public function __construct($username) {
         $this->name = $username;
+        
     }
 
     public function setUsername($username) {
