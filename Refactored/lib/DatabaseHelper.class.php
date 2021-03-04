@@ -19,6 +19,7 @@ class DatabaseHelper {
             $parameters = array($parameters);
         }
 
+
         $statement = null;
         if (count($parameters) > 0) {
             // Use a prepared statement if parameters 

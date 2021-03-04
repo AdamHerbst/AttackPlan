@@ -8,62 +8,37 @@ class UserDAO {
     }
 
     public function createUser($user) {
-
-        echo "username: " . $user->getUsername();
-        echo "<br>";
-        echo "password: " . $user->getPassword();
-        echo "<br>";
-        echo "email: " . $user->getEmail();
-        echo "<br>";
-
+        $hashed_password = password_hash($user->getPassword(), PASSWORD_DEFAULT);
         $sql = "INSERT INTO users(username, password, email) VALUES(?,?,?)";
-        $statement = DatabaseHelper::runQuery($this->connection, $sql, Array($user->getUsername(), $user->getPassword(), $user->getEmail()));
-        echo "Hi " . $user->getUsername() . "You have created an account";
+        $statement = DatabaseHelper::runQuery($this->connection, $sql, Array($user->getUsername(), $hashed_password, $user->getEmail()));
+        
     }
 
-    // public function getAll() {
-    //     $sql = 'SELECT * FROM users';
-    //     $statement = DatabaseHelper::runQuery($this->connection, $sql, null);
+   
 
-    //     $result = $statement->fetchAll();
-    //     $username = array();
-    //     foreach ($result as $row) {  
-    //         $username = $this->findByUsername($row);
-    //        // array_push($cities, $city);
-    //     }
-
-    //     return $username;        
-    // }
-
-    public function findByUsername($user) {
-     
+    public function findByUsername($username) {
         $sql = 'SELECT * FROM users WHERE username=? ';
         $statement = DatabaseHelper::runQuery($this->connection, $sql, Array($username));
+        $row = $statement->fetch();
 
-        $name = $statement->fetch();
-
-        foreach ($name as $nme) {
-            echo $nme['username'];
-    }
-        
-        // $result = $statement->fetch();
-
-        return $user;
+        return $this->toUser($row);
     }
 
-  //   private function toUser($row) {
-  //     $city = new User($row['username']);  
-  //     return $city;
-  // }
+    private function toUser($row) {
+      $user = new User($row['username']);
+      $user->setEmail($row['email']);
+      $user->setPassword($row['password']);
+      return $user;
+  }
 
-    // public function deleteByUsername($username) {
+    public function deleteByUsername($username) {
      
-    //     $sql = 'DELETE FROM users WHERE username=? ';
-    //     $statement = DatabaseHelper::runQuery($this->connection, $sql, Array($username));
-    //     $row = $statement->fetch();
+        $sql = 'DELETE FROM users WHERE username=? ';
+        $statement = DatabaseHelper::runQuery($this->connection, $sql, Array($username));
+        $row = $statement->fetch();
 
-    //     return $username;
-    // }
+        return $username;
+    }
 
 }
 
